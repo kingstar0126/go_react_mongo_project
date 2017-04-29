@@ -1,0 +1,44 @@
+version: '2'
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  db:
+    build: ./db
+    volumes:
+      - ./db/mongodb:/var/lib/mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_USERNAME=apiuser
+      - MONGODB_PASSWORD=1234
+      - MONGODB_DATABASE=apiData
+      - MONGODB_ROOT_USERNAME=root
+      - MONGODB_ROOT_PASSWORD=password123
+    networks:
+      - app-tier
+
+  api:
+    build:
+      context: ./api
+      args:
+        app_env: ${APP_ENV}
+    volumes:
+      - ./api:/go/src/github.com/hugominas/GoMore/api
+    ports:
+      - "5000:8080"
+    links:
+      - db
+    networks:
+      - app-tier
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        app_env: ${APP_ENV}
+    volumes:
+      - ./frontend/src:/frontend/src
+    ports:
+      - "3000:3000"
