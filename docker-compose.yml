@@ -4,7 +4,7 @@ networks:
     driver: bridge
 
 services:
-  db:
+  mongodb:
     build: ./db
     volumes:
       - ./db/mongodb:/var/lib/mongodb
@@ -29,7 +29,7 @@ services:
     ports:
       - "5000:8080"
     links:
-      - db
+      - mongodb
     networks:
       - app-tier
 

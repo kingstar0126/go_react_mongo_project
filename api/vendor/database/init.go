@@ -1,39 +1,57 @@
 package database
 
 import (
-	"fmt"
-	"log"
+	"time"
 
-	"gopkg.in/mgo.v2/bson"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type Person struct {
-	Name  string
-	Phone string
+var DB *gorm.DB
+var err error
+
+type Post struct {
+	gorm.Model
+	Author  string
+	Message string
 }
 
-func main() {
-	session, err := mgo.Dial(db)
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
+func addDatabase(dbname string) error {
+	// create database with dbname, won't do anything if db already exists
+	DB.Exec("CREATE DATABASE " + dbname)
 
-	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
-
-	c := session.DB("test").C("people")
-	err = c.Insert(&Person{"Ale", "+55 53 8116 9639"},
-		&Person{"Cla", "+55 53 8402 8510"})
+	// connect to newly created DB (now has dbname param)
+	connectionParams := "dbname=" + dbname + " user=docker password=docker sslmode=disable host=db"
+	DB, err = gorm.Open("postgres", connectionParams)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	result := Person{}
-	err = c.Find(bson.M{"name": "Ale"}).One(&result)
-	if err != nil {
-		log.Fatal(err)
+	return nil
+}
+
+func Init() (*gorm.DB, error) {
+	// set up DB connection and then attempt to connect 5 times over 25 seconds
+	connectionParams := "user=docker password=docker sslmode=disable host=db"
+	for i := 0; i < 5; i++ {
+		DB, err = gorm.Open("postgres", connectionParams) // gorm checks Ping on Open
+		if err == nil {
+			break
+		}
+		time.Sleep(5 * time.Second)
 	}
 
-	fmt.Println("Phone:", result.Phone)
+	if err != nil {
+		return DB, err
+	}
+
+	// create table if it does not exist
+	if !DB.HasTable(&Post{}) {
+		DB.CreateTable(&Post{})
+	}
+
+	testPost := Post{Author: "Dorper", Message: "GoDoRP is Dope"}
+	DB.Create(&testPost)
+
+	return DB, err
 }
