@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"./lib/database"
+	"github.com/hugominas/gomore/api/lib/database"
 	"github.com/gorilla/mux"
 )
 
@@ -50,7 +50,7 @@ func DeletePersonEndpoint(w http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	for index, item := range people {
 		if item.ID == params["id"] {
-			people = append(people[:index], people[index+1:]...)
+			people = append(people[:index], people[index + 1:]...)
 			break
 		}
 	}
@@ -59,7 +59,6 @@ func DeletePersonEndpoint(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	database.Init()
-
 	router := mux.NewRouter()
 	people = append(people, Person{ID: "1", Firstname: "Hugo", Lastname: "Rodrigues", Address: &Address{City: "Estoril", State: "Lisbon"}})
 	people = append(people, Person{ID: "2", Firstname: "Bianca", Lastname: "Moura"})

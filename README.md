@@ -1,11 +1,12 @@
 # GoMore Boilerplate
 GoMore (Golang, Docker, React, Mongodb) boilerplate.
+Forked from https://github.com/McMenemy/GoDoRP 
 
 ## Features
 - [x] Docker containers config
 - [ ] React Redux Boilerplate
-- [x] Golang Mux boilerplate
-- [ ] Mongodb setup
+- [x] Golang Mux API boilerplate
+- [x] Mongodb setup
 - [ ] CD/CI Jenkins integration
 
 ## Benifits

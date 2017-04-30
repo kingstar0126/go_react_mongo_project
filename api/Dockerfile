@@ -11,7 +11,7 @@ COPY . /go/src/github.com/hugominas/gomore/api
 WORKDIR /go/src/github.com/hugominas/gomore/api
 
 # added vendor services will need to be included here
-RUN go get ./vendor/database
+RUN go get ./lib/database
 
 RUN go get ./
 RUN	go get gopkg.in/mgo.v2/bson

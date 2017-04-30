@@ -11,11 +11,11 @@ services:
     ports:
       - "27017:27017"
     environment:
-      - MONGODB_USERNAME=apiuser
-      - MONGODB_PASSWORD=1234
-      - MONGODB_DATABASE=apiData
-      - MONGODB_ROOT_USERNAME=root
-      - MONGODB_ROOT_PASSWORD=password123
+      - MONGODB_USERNAME=${MONGODB_USERNAME}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - MONGODB_ROOT_USERNAME=${MONGODB_ROOT_USERNAME}
+      - MONGODB_ROOT_PASSWORD=${MONGODB_ROOT_PASSWORD}
     networks:
       - app-tier
 
@@ -25,7 +25,7 @@ services:
       args:
         app_env: ${APP_ENV}
     volumes:
-      - ./api:/go/src/github.com/hugominas/GoMore/api
+      - ./api:/go/src/github.com/hugominas/gomore/api
     ports:
       - "5000:8080"
     links:

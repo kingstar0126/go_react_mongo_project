@@ -1,8 +1,9 @@
 package database
 
 import (
-	"fmt"
 	"log"
+	"os"
+	"fmt"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -12,8 +13,10 @@ type Person struct {
 	Phone string
 }
 
-func Init() {
-	session, err := mgo.Dial("mongodb")
+func Init() (string){
+	fmt.Println("FOO: %v", os.Getenv("MONGODB_USERNAME"))
+
+	session, err := mgo.Dial("localhost, mongodb")
 	if err != nil {
 		panic(err)
 	}
@@ -35,5 +38,5 @@ func Init() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Phone:", result.Phone)
+	return result.Phone
 }
