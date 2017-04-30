@@ -58,7 +58,9 @@ func DeletePersonEndpoint(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+
 	database.Init()
+
 	router := mux.NewRouter()
 	people = append(people, Person{ID: "1", Firstname: "Hugo", Lastname: "Rodrigues", Address: &Address{City: "Estoril", State: "Lisbon"}})
 	people = append(people, Person{ID: "2", Firstname: "Bianca", Lastname: "Moura"})
